@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Recommended Books{% endblock %}
+{% block sidebar %}
+  <a href="/dashboard">🏠 Dashboard</a>
+  <a href="/books">📘 Recommended Books</a>
+  <a href="/library">📚 All Books</a>
+  <a href="/history">🕘 My Book History</a>
+  <a href="/update-level">🎓 Update Academic Level</a>
+  <a href="/logout">🚪 Logout</a>
+{% endblock %}
+{% block content %}
+  <h2>📘 Recommended Books for {{ program }} - Level {{ level }}</h2>
+  <hr>
+  {% if books %}
+    <ul class="list-group">
+    {% for book in books %}
+      <li class="list-group-item">
+        <strong>{{ book.title }}</strong> by {{ book.author }} — [{{ book.program }} | {{ book.level }}]
+        <br><em>Keywords:</em> {{ book.keywords }}
+        <br><a href="{{ url_for('read_book', book_id=book.id) }}" class="btn btn-sm btn-outline-primary mt-2">Read</a>
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No books found.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to E-Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .hero {
+        position: relative;
+        background-image: url('https://images.unsplash.com/photo-1512820790803-83ca734da794');
+        background-size: cover;
+        background-position: center;
+        height: 80vh;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* 🔦 Dimming overlay */
+        z-index: 1;
+    }
+    .hero h1,
+    .hero p,
+    .hero a {
+        z-index: 2; /* 🪄 Ensure text appears above overlay */
+        position: relative;
+    }
+</style>
+
+</head>
+<body>
+
+    <div class="hero">
+        <h1>Welcome to Your Digital Library</h1>
+        <p>Access books, get recommendations, and level up your studies.</p>
+        <a href="/register" class="btn btn-light btn-lg mt-3 me-2">Get Started</a>
+        <a href="/login" class="btn btn-outline-light btn-lg mt-3">Login</a>
+    </div>
+
+    <div class="container text-center mt-5">
+        <h2>📘 What You’ll Find Here</h2>
+        <p class="lead">This e-library recommends books tailored to your course and level. Browse. Download. Learn.</p>
+    </div>
+
+</body>
+</html>

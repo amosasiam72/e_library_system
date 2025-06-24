@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block sidebar %}
+  <a href="/dashboard">🏠 Dashboard</a>
+  <a href="/books">📘 Recommended Books</a>
+  <a href="/library">📚 All Books</a>
+  <a href="/history">🕘 My Book History</a>
+  <a href="/update-level">🎓 Update Academic Level</a>
+  <a href="/logout">🚪 Logout</a>
+{% endblock %}
+{% block content %}
+  <h2>Welcome, {{ user.name }} 👋</h2>
+  <p>Program: {{ user.program }} | Level: {{ user.level }}</p>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+    <div class="col">
+      <div class="card border-0 shadow-sm h-100 text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">📘 Recommended Books</h5>
+          <p class="card-text">Explore books tailored for your academic level.</p>
+          <a href="/books" class="btn btn-light btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm h-100 text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">📚 All Books</h5>
+          <p class="card-text">Browse the entire library catalog.</p>
+          <a href="/library" class="btn btn-light btn-sm">Browse</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm h-100 text-white bg-warning">
+        <div class="card-body">
+          <h5 class="card-title">🕘 My History</h5>
+          <p class="card-text">View your previously accessed books.</p>
+          <a href="/history" class="btn btn-light btn-sm">Check History</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

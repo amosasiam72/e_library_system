@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Book History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2>📖 My Book Access History</h2>
+        {% if logs %}
+            <ul class="list-group">
+                {% for log in logs %}
+                    <li class="list-group-item">
+                        <strong>{{ log.book.title }}</strong> ({{ log.book.author }}) — 
+                        <small>{{ log.timestamp.strftime('%b %d, %Y %I:%M %p') }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't accessed any books yet.</p>
+        {% endif %}
+        <a href="/dashboard" class="btn btn-secondary mt-3">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

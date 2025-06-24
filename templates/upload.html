@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}Upload Book{% endblock %}
+{% block sidebar %}
+  <a href="/dashboard">🏠 Dashboard</a>
+  <a href="/upload">📤 Upload Book</a>
+  <a href="/manage-books">🛠 Manage Books</a>
+  <a href="/recommendations">📩 View Recommendations</a>
+  <a href="/add-user">➕ Add User</a>
+  <a href="/all-books">📚 All Books</a>
+  <a href="/logout">🚪 Logout</a>
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-4">📤 Upload New Book</h3>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.title.label }} {{ form.title(class="form-control") }}</div>
+    <div class="mb-3">{{ form.author.label }} {{ form.author(class="form-control") }}</div>
+    <div class="mb-3">{{ form.program.label }} {{ form.program(class="form-select") }}</div>
+    <div class="mb-3">{{ form.level.label }} {{ form.level(class="form-select") }}</div>
+    <div class="mb-3">{{ form.keywords.label }} {{ form.keywords(class="form-control") }}</div>
+    <div class="mb-3">{{ form.file.label }} {{ form.file(class="form-control") }}</div>
+    {{ form.submit(class="btn btn-success w-100") }}
+  </form>
+</div>
+{% endblock %}

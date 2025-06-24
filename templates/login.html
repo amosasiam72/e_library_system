@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 85vh;">
+  <div class="card shadow-lg p-4" style="min-width: 400px;">
+    <h3 class="text-center mb-4">🔐 E-Library Login</h3>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control", placeholder="Enter your email") }}
+      </div>
+      <div class="mb-3">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control", placeholder="Enter your password") }}
+      </div>
+      {{ form.submit(class="btn btn-primary w-100") }}
+    </form>
+
+    <p class="text-center mt-3 text-muted">Don't have an account? <a href="/register">Register</a></p>
+  </div>
+</div>
+{% endblock %}

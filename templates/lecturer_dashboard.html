@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Lecturer Dashboard{% endblock %}
+{% block sidebar %}
+  <a href="/dashboard">🏠 Dashboard</a>
+  <a href="/recommend-book">📩 Recommend Book</a>
+  <a href="/my-recommendations">📜 My Recommendations</a>
+  <a href="/lecturer-library">📚 View Library</a>
+  <a href="/logout">🚪 Logout</a>
+{% endblock %}
+{% block content %}
+  <h2>Welcome, {{ user.name }} 👨‍🏫, you are logged in as a lecturer.</h2>
+  <p>Use the menu to recommend books to support your students.</p>
+  <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+    <div class="col">
+      <div class="card border-0 shadow-sm h-100 text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">📩 Recommend Book</h5>
+          <p class="card-text">Submit book recommendations to the admin.</p>
+          <a href="/recommend-book" class="btn btn-light btn-sm">Recommend</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm h-100 text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">📜 My Recommendations</h5>
+          <p class="card-text">Review the books you have previously submitted.</p>
+          <a href="/my-recommendations" class="btn btn-light btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

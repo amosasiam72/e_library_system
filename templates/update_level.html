@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Academic Level</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h2>🎓 Update Your Academic Level</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.level.label(class="form-label") }}
+                    {{ form.level(class="form-control", placeholder="e.g., Level 200") }}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+            <a href="/dashboard" class="btn btn-secondary mt-3">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
