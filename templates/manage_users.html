@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}Manage Users{% endblock %}
+{% block sidebar %}
+  <a href="/dashboard">🏠 Dashboard</a>
+  <a href="/upload">📤 Upload Book</a>
+  <a href="/manage-books">🛠 Manage Books</a>
+  <a href="/recommendations">📩 View Recommendations</a>
+  <a href="/add-user">➕ Add User</a>
+  <a href="/manage-users">👥 Manage Users</a>
+  <a href="/all-books">📚 All Books</a>
+  <a href="/logout">🚪 Logout</a>
+{% endblock %}
+{% block content %}
+<h3>👥 Manage Users</h3>
+
+<form method="get" class="row g-3 mt-2 mb-3">
+  <div class="col-md-4">
+    <input type="text" name="q" class="form-control" placeholder="Search users..." value="{{ search }}">
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+{% if users %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th><th>Email</th><th>Role</th><th>Program</th><th>Level</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>{{ user.program }}</td>
+        <td>{{ user.level }}</td>
+        <td>
+          <a href="{{ url_for('edit_user', user_id=user.id) }}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{{ url_for('reset_user_password', user_id=user.id) }}" class="btn btn-sm btn-secondary">Reset Password</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No users found.</p>
+{% endif %}
+{% endblock %}

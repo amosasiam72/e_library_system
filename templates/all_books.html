@@ -10,61 +10,55 @@
   <a href="/logout">🚪 Logout</a>
 {% endblock %}
 {% block content %}
-  <h2>📚 All Books in the Library</h2>
+    <h2>📚 All Books in Library</h2>
+
+  <form method="get" class="row g-3 mt-2 mb-4">
+    <div class="col-md-4">
+      <input type="text" name="q" class="form-control" placeholder="Search by title, author, or keywords" value="{{ search }}">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
   {% if books.items %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Program</th>
-          <th>Level</th>
-          <th>Keywords</th>
-          <th>View</th>
-        </tr>
-      </thead>
-      <tbody>
+    <ul class="list-group">
       {% for book in books.items %}
-        <tr>
-          <td>{{ book.title }}</td>
-          <td>{{ book.author }}</td>
-          <td>{{ book.program }}</td>
-          <td>{{ book.level }}</td>
-          <td>{{ book.keywords }}</td>
-          <td>
-            <a href="{{ url_for('read_book', book_id=book.id) }}" class="btn btn-sm btn-outline-primary">Read</a>
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No books available in the library.</p>
-  {% endif %}
-{% endblock %}
-
-<nav aria-label="Page navigation" class="mt-4">
-  <ul class="pagination">
-    {% if books.has_prev %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ books.prev_num }}&q={{ search }}">← Previous</a>
-      </li>
-    {% endif %}
-    
-    {% for page_num in books.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
-      {% if page_num %}
-        <li class="page-item {% if page_num == books.page %}active{% endif %}">
-          <a class="page-link" href="?page={{ page_num }}&q={{ search }}">{{ page_num }}</a>
+        <li class="list-group-item">
+          <strong>{{ book.title }}</strong> by {{ book.author }} <br>
+          <em>Program:</em> {{ book.program }} | <em>Level:</em> {{ book.level }}<br>
+          <em>Keywords:</em> {{ book.keywords }}
         </li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">…</span></li>
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No books found.</p>
+  {% endif %}
 
-    {% if books.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ books.next_num }}&q={{ search }}">Next →</a>
-      </li>
-    {% endif %}
-  </ul>
-</nav>
+  <!-- Pagination -->
+  <nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination">
+      {% if books.has_prev %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ books.prev_num }}&q={{ search }}">← Previous</a>
+        </li>
+      {% endif %}
+
+      {% for page_num in books.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+        {% if page_num %}
+          <li class="page-item {% if page_num == books.page %}active{% endif %}">
+            <a class="page-link" href="?page={{ page_num }}&q={{ search }}">{{ page_num }}</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if books.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ books.next_num }}&q={{ search }}">Next →</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endblock %}

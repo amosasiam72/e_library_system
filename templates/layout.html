@@ -24,7 +24,7 @@
     }
   </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
   <div class="row g-0">
     <div class="col-md-2 sidebar">
       <h4 class="text-center">📚 E-Library</h4>
@@ -62,6 +62,14 @@
     });
   }, 5000); // 5,000 ms = 10 seconds
 </script>
+
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+  <div class="container">
+    <small>
+      📚 E-Library System &copy; {{ current_year }} — Powered by Flask • Designed by Amos Asiam for final year project.
+    </small>
+  </div>
+</footer>
 
 </body>
 </html>

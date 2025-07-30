@@ -1,3 +1,4 @@
+#importing necessary libraries and modules
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField, SubmitField, TextAreaField
@@ -12,11 +13,14 @@ from datetime import datetime
 
 
 
+
 # Initializing Flask application and configuring it
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret-key-here'  # we will change this later to something secure
+app.config['SECRET_KEY'] = 'secret-key-here'  # we will change this later to something secure during production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+
 
 
 db = SQLAlchemy(app)
@@ -166,7 +170,7 @@ class AddUserForm(FlaskForm):
 def home():
     return render_template('index.html')
 
-# Code for user registration(students only)
+# Route for user registration(students only)
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -186,7 +190,7 @@ def register():
         return redirect(url_for('login'))  
     return render_template('register.html', form=form)
 
-# Code for user login (students, lecturers, and admin)
+# Route for user login (students, lecturers, and admin)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -201,7 +205,7 @@ def login():
            flash("Invalid email or password.", "danger")
     return render_template('login.html', form=form)
 
-# Code for the dashboard, which redirects based on user role
+# Route for the dashboard, which redirects based on user role
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -214,7 +218,7 @@ def dashboard():
     else:
         return "Unknown role"
 
-# Code for uploading books (admin only)
+# Route for uploading books (admin only)
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
@@ -241,7 +245,7 @@ def upload():
         return "Book uploaded successfully!"
     return render_template('upload.html', form=form)
 
-#Code for searching and filtering books to be recommended to students 
+#Route for searching and filtering books to be recommended to students 
 @app.route('/books', methods=['GET', 'POST'])
 @login_required
 def books():
@@ -255,7 +259,7 @@ def books():
 
     return render_template('books.html', books=books, search=search_query, program=program, level=level)
 
-#Code for reading books
+#Route for reading books
 @app.route('/read/<int:book_id>')
 @login_required
 def read_book(book_id):
@@ -269,7 +273,7 @@ def read_book(book_id):
 
     return render_template('read_book.html', book=book)
 
-# Code for viewing access history
+# Route for viewing access history
 @app.route('/history')
 @login_required
 def history():
@@ -279,7 +283,7 @@ def history():
     logs = AccessLog.query.filter_by(user_id=current_user.id).order_by(AccessLog.timestamp.desc()).all()
     return render_template('history.html', logs=logs)
 
-# Code for viewing library of books
+# Route for viewing library of books
 @app.route('/library')
 @login_required
 def library():
@@ -298,7 +302,7 @@ def library():
     return render_template('library.html', books=books, search=search_query)
 
 
-# Code for updating academic level
+# Route for updating academic level
 @app.route('/update-level', methods=['GET', 'POST'])
 @login_required
 def update_level():
@@ -314,17 +318,28 @@ def update_level():
 
     return render_template('update_level.html', form=form)
 
-# Code for managing books (admin only)
+# Route for managing books (admin only)
 @app.route('/manage-books')
 @login_required
 def manage_books():
     if current_user.role != 'admin':
-        return "Access denied."
+        return "Access denied"
 
-    books = Book.query.order_by(Book.title).all()
-    return render_template('manage_books.html', books=books)
+    search_query = request.args.get('q', '')
+    books_query = Book.query
 
-# Code for editing a book (admin only)
+    if search_query:
+        books_query = books_query.filter(
+            (Book.title.ilike(f"%{search_query}%")) |
+            (Book.author.ilike(f"%{search_query}%")) |
+            (Book.keywords.ilike(f"%{search_query}%"))
+        )
+
+    books = books_query.order_by(Book.title).all()
+    return render_template("manage_books.html", books=books, search=search_query)
+
+
+# Route for editing a book (admin only)
 @app.route('/edit-book/<int:book_id>', methods=['GET', 'POST'])
 @login_required
 def edit_book(book_id):
@@ -346,7 +361,7 @@ def edit_book(book_id):
 
     return render_template('edit_book.html', form=form, book=book)
 
-# Code for deleting a book (admin only)
+# Route for deleting a book (admin only)
 @app.route('/delete-book/<int:book_id>')
 @login_required
 def delete_book(book_id):
@@ -359,7 +374,7 @@ def delete_book(book_id):
     flash("Book deleted.", "danger")
     return redirect(url_for('manage_books'))
 
-# Code for recommending a book (lecturer only)
+# Route for recommending a book (lecturer only)
 @app.route('/recommend-book', methods=['GET', 'POST'])
 @login_required
 def recommend_book():
@@ -385,7 +400,7 @@ def recommend_book():
 
     return render_template('recommend_book.html', form=form)
 
-# Code for viewing all recommendations made by lecturers (admin only)
+# Route for viewing all recommendations made by lecturers (admin only)
 @app.route('/recommendations')
 @login_required
 def recommendations():
@@ -395,7 +410,7 @@ def recommendations():
     recs = Recommendation.query.order_by(Recommendation.timestamp.desc()).all()
     return render_template('recommendations.html', recs=recs)
 
-# Code for accessing lecturer dashboard
+# Route for accessing lecturer dashboard
 @app.route('/lecturer-dashboard')
 @login_required
 def lecturer_dashboard():
@@ -403,7 +418,7 @@ def lecturer_dashboard():
         return "Access denied."
     return render_template('lecturer_dashboard.html', user=current_user)
 
-# Code for viewing recommendations made by the logged-in lecturer
+# Route for viewing recommendations made by the logged-in lecturer
 @app.route('/my-recommendations')
 @login_required
 def my_recommendations():
@@ -412,7 +427,7 @@ def my_recommendations():
     recs = Recommendation.query.filter_by(email=current_user.email).order_by(Recommendation.timestamp.desc()).all()
     return render_template('my_recommendations.html', recs=recs)
 
-# Code for adding a new user (admin only)
+# Route for adding a new user (admin only)
 @app.route('/add-user', methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -442,7 +457,7 @@ def add_user():
 
     return render_template('add_user.html', form=form)
 
-# Code for viewing all users (admin only)
+# Route for viewing all users (admin only)
 @app.route('/all-books')
 @login_required
 def all_books():
@@ -464,7 +479,7 @@ def all_books():
     return render_template('all_books.html', books=books)
 
 
-# Error handling for 404 and 403 errors
+# Rout for Error handling for 404 and 403 errors
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("page_not_found.html"), 404
@@ -473,7 +488,7 @@ def page_not_found(e):
 def access_denied(e):
     return render_template("access_denied.html"), 403
 
-# Code for lecturer library (lecturer only)
+# Route for lecturer library (lecturer only)
 @app.route('/lecturer-library')
 @login_required
 def lecturer_library():
@@ -495,8 +510,69 @@ def lecturer_library():
 
     return render_template("lecturer_library.html", books=books, search=search_query)
 
+# Route for managing users (admin only)
+@app.route('/manage-users')
+@login_required
+def manage_users():
+    if current_user.role != 'admin':
+        return "Access denied"
 
-# Code for logging out
+    search = request.args.get("q", "")
+    query = User.query
+    if search:
+        query = query.filter(
+            (User.name.ilike(f"%{search}%")) |
+            (User.email.ilike(f"%{search}%")) |
+            (User.role.ilike(f"%{search}%"))
+        )
+    users = query.order_by(User.name).all()
+    return render_template("manage_users.html", users=users, search=search)
+
+# Route for editing user details (admin only)
+@app.route('/admin-reset-password/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def reset_user_password(user_id):
+    if current_user.role != 'admin':
+        return "Access denied"
+
+    user = User.query.get_or_404(user_id)
+    if request.method == 'POST':
+        new_password = generate_password_hash(request.form['password'])
+        user.password = new_password
+        db.session.commit()
+        flash(f"Password for {user.name} has been reset.", "success")
+        return redirect(url_for('manage_users'))
+
+    return render_template("admin_reset_password.html", user=user)
+
+@app.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    if current_user.role != 'admin':
+        return "Access denied"
+
+    user = User.query.get_or_404(user_id)
+
+    if request.method == 'POST':
+        user.name = request.form['name']
+        user.email = request.form['email']
+        user.role = request.form['role']
+        user.program = request.form['program']
+        user.level = request.form['level']
+        db.session.commit()
+        flash("User info updated.", "success")
+        return redirect(url_for('manage_users'))
+
+    return render_template('edit_user.html', user=user)
+
+# Context processor to inject the current year into templates
+@app.context_processor
+def inject_now():
+    return {'current_year': datetime.now().year}
+
+
+
+# Route for logging out
 @app.route('/logout')
 @login_required
 def logout():

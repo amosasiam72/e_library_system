@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Edit User{% endblock %}
+{% block content %}
+<h3>Edit User - {{ user.name }}</h3>
+<form method="POST">
+  <input name="name" class="form-control mb-2" value="{{ user.name }}" required>
+  <input name="email" class="form-control mb-2" value="{{ user.email }}" required>
+  <select name="role" class="form-select mb-2">
+    <option value="student" {% if user.role == 'student' %}selected{% endif %}>Student</option>
+    <option value="lecturer" {% if user.role == 'lecturer' %}selected{% endif %}>Lecturer</option>
+    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+  </select>
+  <select name="program" class="form-select mb-2">
+    <option value="Information Technology" {% if user.program == 'Information Technology' %}selected{% endif %}>Information Technology</option>
+    <option value="Computer Science" {% if user.program == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+    <option value="Information Systems" {% if user.program == 'Information Systems' %}selected{% endif %}>Information Systems</option>
+    <option value="Mobile Computing" {% if user.program == 'Mobile Computing' %}selected{% endif %}>Mobile Computing</option>
+    <option value="Engineering" {% if user.program == 'Engineering' %}selected{% endif %}>Engineering</option>
+    <option value="Cyber Security" {% if user.program == 'Cyber Security' %}selected{% endif %}>Cyber Security</option>
+    <option value="Software Engineering" {% if user.program == 'Software Engineering' %}selected{% endif %}>Software Engineering</option>
+    <option value="Data and Analytics" {% if user.program == 'Data and Analytics' %}selected{% endif %}>Data and Analytics</option>
+  </select>
+  <select name="level" class="form-select mb-2">
+    <option value="100" {% if user.level == '100' %}selected{% endif %}>Level 100</option>
+    <option value="200" {% if user.level == '200' %}selected{% endif %}>Level 200</option>
+    <option value="300" {% if user.level == '300' %}selected{% endif %}>Level 300</option>
+    <option value="400" {% if user.level == '400' %}selected{% endif %}>Level 400</option>
+  </select>
+  <button type="submit" class="btn btn-success">Update</button>
+  <a href="/manage-users" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
+

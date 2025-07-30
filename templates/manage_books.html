@@ -7,6 +7,14 @@
 <body class="bg-light">
     <div class="container mt-5">
         <h2>📚 Manage Books</h2>
+<form method="get" class="row g-3 mt-2 mb-3">
+  <div class="col-md-4">
+    <input type="text" name="q" class="form-control" placeholder="Search by title, author, or keywords" value="{{ search }}">
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
         {% if books %}
             <table class="table table-bordered mt-4">
                 <thead>
@@ -21,6 +29,7 @@
                 {% for book in books %}
                     <tr>
                         <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
                         <td>{{ book.program }}</td>
                         <td>{{ book.level }}</td>
                         <td>
